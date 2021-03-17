@@ -11,8 +11,10 @@ data class Stories(
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "character_id")
         var characters : Character? = null,
+        @Column(name = "name")
         val name: String,
+        @Column(name = "title")
         val title: String,
-        val description: String,
-        val modified: String
+        @Column(name = "description")
+        val description: String
 )

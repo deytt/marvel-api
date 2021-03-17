@@ -38,8 +38,7 @@ class CharactersServiceImpl(private val repository: CharactersRepository) : Char
         return optional.map {
             val characterToUpdate = it.copy(
                     name = character.name,
-                    description = character.description,
-                    modified = character.modified
+                    description = character.description
             )
             repository.save(characterToUpdate)
         }

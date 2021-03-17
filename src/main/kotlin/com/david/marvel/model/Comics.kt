@@ -16,7 +16,5 @@ data class Comics(
         @Column(name = "title")
         val title: String,
         @Column(name = "description")
-        val description: String,
-        @Column(name = "modified")
-        val modified: String
+        val description: String
 )

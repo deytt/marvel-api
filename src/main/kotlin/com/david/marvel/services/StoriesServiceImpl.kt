@@ -33,8 +33,7 @@ class StoriesServiceImpl(private val repository: StoriesRepository) : StoriesSer
                     characters = stories.characters,
                     name = stories.name,
                     title = stories.title,
-                    description = stories.description,
-                    modified = stories.modified
+                    description = stories.description
             )
             repository.save(comicsToUpdate)
         }

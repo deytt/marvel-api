@@ -24,7 +24,7 @@ class SeriesControllerTests {
 
     @Test
     fun `test find all`() {
-        seriesRepository.save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        seriesRepository.save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/series"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$").isArray)
@@ -32,13 +32,12 @@ class SeriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].name").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].title").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].description").isString)
-                .andExpect(MockMvcResultMatchers.jsonPath("\$[0].modified").isString)
                 .andDo(MockMvcResultHandlers.print())
     }
 
     @Test
     fun `test find by id`() {
-        val series = seriesRepository.save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val series = seriesRepository.save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/series/${series.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
@@ -46,14 +45,13 @@ class SeriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(series.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(series.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(series.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(series.modified))
                 .andDo(MockMvcResultHandlers.print())
 
     }
 
     @Test
     fun `test create series`() {
-        val series = Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03")
+        val series = Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga")
         val json = ObjectMapper().writeValueAsString(series)
         seriesRepository.deleteAll()
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/public/series")
@@ -64,7 +62,6 @@ class SeriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(series.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(series.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(series.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(series.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         Assertions.assertFalse(seriesRepository.findAll().isEmpty())
@@ -74,7 +71,7 @@ class SeriesControllerTests {
     @Test
     fun `test update series`() {
         val series = seriesRepository
-                .save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+                .save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
                 .copy(name = "Hulk - UPDATED")
         val json = ObjectMapper().writeValueAsString(series)
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/public/series/${series.id}")
@@ -85,7 +82,6 @@ class SeriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(series.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(series.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(series.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(series.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         val findById = seriesRepository.findById(series.id!!)
@@ -96,7 +92,7 @@ class SeriesControllerTests {
 
     @Test
     fun `test delete series`() {
-        val series = seriesRepository.save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val series = seriesRepository.save(Series(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/public/series/${series.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andDo(MockMvcResultHandlers.print())

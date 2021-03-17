@@ -24,7 +24,7 @@ class StoriesControllerTests {
 
     @Test
     fun `test find all`() {
-        storiesRepository.save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        storiesRepository.save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/stories"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$").isArray)
@@ -32,13 +32,12 @@ class StoriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].name").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].title").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].description").isString)
-                .andExpect(MockMvcResultMatchers.jsonPath("\$[0].modified").isString)
                 .andDo(MockMvcResultHandlers.print())
     }
 
     @Test
     fun `test find by id`() {
-        val stories = storiesRepository.save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val stories = storiesRepository.save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/stories/${stories.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
@@ -46,14 +45,13 @@ class StoriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(stories.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(stories.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(stories.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(stories.modified))
                 .andDo(MockMvcResultHandlers.print())
 
     }
 
     @Test
     fun `test create stories`() {
-        val stories = Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03")
+        val stories = Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga")
         val json = ObjectMapper().writeValueAsString(stories)
         storiesRepository.deleteAll()
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/public/stories")
@@ -64,7 +62,6 @@ class StoriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(stories.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(stories.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(stories.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(stories.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         Assertions.assertFalse(storiesRepository.findAll().isEmpty())
@@ -74,7 +71,7 @@ class StoriesControllerTests {
     @Test
     fun `test update stories`() {
         val stories = storiesRepository
-                .save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+                .save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
                 .copy(name = "Hulk - UPDATED")
         val json = ObjectMapper().writeValueAsString(stories)
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/public/stories/${stories.id}")
@@ -85,7 +82,6 @@ class StoriesControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(stories.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(stories.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(stories.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(stories.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         val findById = storiesRepository.findById(stories.id!!)
@@ -96,7 +92,7 @@ class StoriesControllerTests {
 
     @Test
     fun `test delete stories`() {
-        val stories = storiesRepository.save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val stories = storiesRepository.save(Stories(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/public/stories/${stories.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andDo(MockMvcResultHandlers.print())

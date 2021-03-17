@@ -33,8 +33,7 @@ class SeriesServiceImpl(private val repository: SeriesRepository) : SeriesServic
                     characters = series.characters,
                     name = series.name,
                     title = series.title,
-                    description = series.description,
-                    modified = series.modified
+                    description = series.description
             )
             repository.save(comicsToUpdate)
         }

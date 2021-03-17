@@ -26,7 +26,7 @@ class ComicsControllerTests {
 
     @Test
     fun `test find all`() {
-        comicssRepository.save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        comicssRepository.save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/comics"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$").isArray)
@@ -34,13 +34,12 @@ class ComicsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].name").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].title").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].description").isString)
-                .andExpect(MockMvcResultMatchers.jsonPath("\$[0].modified").isString)
                 .andDo(MockMvcResultHandlers.print())
     }
 
     @Test
     fun `test find by id`() {
-        val comics = comicssRepository.save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val comics = comicssRepository.save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/comics/${comics.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
@@ -48,14 +47,13 @@ class ComicsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(comics.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(comics.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(comics.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(comics.modified))
                 .andDo(MockMvcResultHandlers.print())
 
     }
 
     @Test
     fun `test create comics`() {
-        val comics = Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03")
+        val comics = Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga")
         val json = ObjectMapper().writeValueAsString(comics)
         comicssRepository.deleteAll()
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/public/comics")
@@ -66,7 +64,6 @@ class ComicsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(comics.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(comics.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(comics.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(comics.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         Assertions.assertFalse(comicssRepository.findAll().isEmpty())
@@ -76,7 +73,7 @@ class ComicsControllerTests {
     @Test
     fun `test update comics`() {
         val comics = comicssRepository
-                .save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+                .save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
                 .copy(name = "Hulk - UPDATED")
         val json = ObjectMapper().writeValueAsString(comics)
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/public/comics/${comics.id}")
@@ -87,7 +84,6 @@ class ComicsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(comics.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(comics.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(comics.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(comics.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         val findById = comicssRepository.findById(comics.id!!)
@@ -98,7 +94,7 @@ class ComicsControllerTests {
 
     @Test
     fun `test delete comics`() {
-        val comics = comicssRepository.save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val comics = comicssRepository.save(Comics(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/public/comics/${comics.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andDo(MockMvcResultHandlers.print())

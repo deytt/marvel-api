@@ -26,6 +26,5 @@ data class Character (
         var stories: List<Stories> = emptyList(),
 
         val name: String,
-        val description: String,
-        val modified: String
+        val description: String
 )

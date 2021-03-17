@@ -34,8 +34,7 @@ class ComicsServiceImpl(private val repository: ComicsRepository) : ComicsServic
                     characters = comics.characters,
                     name = comics.name,
                     title = comics.title,
-                    description = comics.description,
-                    modified = comics.modified
+                    description = comics.description
                     )
             repository.save(comicsToUpdate)
         }

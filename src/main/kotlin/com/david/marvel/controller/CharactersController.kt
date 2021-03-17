@@ -9,16 +9,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/v1/public/characters")
 class CharactersController(private val service: CharactersService) {
-    //TODO analisar possíveis erros e retornar o erro correto como está descrito na documentação da API
-    //TODO implementar classe de filtro X_API_Key
-    //TODO fazer testes que garanta o seguinte: Ao excluir entidades filhas, não excluir a entidade character, e ao exlcuir a entidade character excluir as entidades filhas (talvez com excessão da filha storeis)
-    //TODO descobrir oque o /actuator faz
-    //TODO implementar mensagem de erro ao entar inserir qualquer filho passando um id errado para o character id
-    //TODO criar testes para get comics / get events / get stories / get series
-    //TODO logar os ao criar, editar e excluir um registro
-    //TODO rápida análise para ver oque é necessário para tratar o campo modified como data, se for muito trabalhoso, então, retirara !
-    //TODO descobrir oque é um BEAN e o que é um SERVICE
-
 
     @GetMapping
     fun getAll(): List<Character> = service.getAll()

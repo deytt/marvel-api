@@ -25,34 +25,32 @@ class CharactersControllerTests {
 
     @Test
     fun `test find all`() {
-        charactersRepository.save(Character(name = "Hulk", description = "Hulk Esmaga", modified = "2019-02-03"))
+        charactersRepository.save(Character(name = "Hulk", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/characters"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$").isArray)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].id").isNumber)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].name").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].description").isString)
-                .andExpect(MockMvcResultMatchers.jsonPath("\$[0].modified").isString)
                 .andDo(MockMvcResultHandlers.print())
     }
 
     @Test
     fun `test find by id`() {
-        val character = charactersRepository.save(Character(name = "Hulk", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val character = charactersRepository.save(Character(name = "Hulk", description = "Hulk Esmaga"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/characters/${character.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.id").value(character.id))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(character.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(character.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(character.modified))
                 .andDo(MockMvcResultHandlers.print())
 
     }
 
     @Test
     fun `test create character`() {
-        val character = Character(name = "Hulk", description = "Hulk Esmaga", modified = "2019-02-03")
+        val character = Character(name = "Hulk", description = "Hulk Esmaga")
         val json = ObjectMapper().writeValueAsString(character)
         charactersRepository.deleteAll()
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/public/characters")
@@ -62,7 +60,6 @@ class CharactersControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isCreated)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(character.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(character.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(character.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         Assertions.assertFalse(charactersRepository.findAll().isEmpty())
@@ -72,7 +69,7 @@ class CharactersControllerTests {
     @Test
     fun `test update character`() {
         val character = charactersRepository
-                .save(Character(name = "Hulk", description = "Hulk Esmaga", modified = "2019-02-03"))
+                .save(Character(name = "Hulk", description = "Hulk Esmaga"))
                 .copy(name = "Hulk - UPDATED")
         val json = ObjectMapper().writeValueAsString(character)
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/public/characters/${character.id}")
@@ -82,7 +79,6 @@ class CharactersControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(character.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(character.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(character.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         val findById = charactersRepository.findById(character.id!!)
@@ -93,7 +89,7 @@ class CharactersControllerTests {
 
     @Test
     fun `test delete character`() {
-        val character = charactersRepository.save(Character(name = "Hulk", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val character = charactersRepository.save(Character(name = "Hulk", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/public/characters/${character.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andDo(MockMvcResultHandlers.print())

@@ -24,7 +24,7 @@ class EventsControllerTests {
 
     @Test
     fun `test find all`() {
-        eventsRepository.save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        eventsRepository.save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/events"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$").isArray)
@@ -32,13 +32,12 @@ class EventsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].name").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].title").isString)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$[0].description").isString)
-                .andExpect(MockMvcResultMatchers.jsonPath("\$[0].modified").isString)
                 .andDo(MockMvcResultHandlers.print())
     }
 
     @Test
     fun `test find by id`() {
-        val events = eventsRepository.save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val events = eventsRepository.save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/public/events/${events.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
@@ -46,14 +45,13 @@ class EventsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(events.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(events.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(events.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(events.modified))
                 .andDo(MockMvcResultHandlers.print())
 
     }
 
     @Test
     fun `test create events`() {
-        val events = Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03")
+        val events = Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga")
         val json = ObjectMapper().writeValueAsString(events)
         eventsRepository.deleteAll()
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/public/events")
@@ -64,7 +62,6 @@ class EventsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(events.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(events.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(events.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(events.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         Assertions.assertFalse(eventsRepository.findAll().isEmpty())
@@ -74,7 +71,7 @@ class EventsControllerTests {
     @Test
     fun `test update events`() {
         val events = eventsRepository
-                .save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+                .save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
                 .copy(name = "Hulk - UPDATED")
         val json = ObjectMapper().writeValueAsString(events)
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/public/events/${events.id}")
@@ -85,7 +82,6 @@ class EventsControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(events.name))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.title").value(events.title))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.description").value(events.description))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.modified").value(events.modified))
                 .andDo(MockMvcResultHandlers.print())
 
         val findById = eventsRepository.findById(events.id!!)
@@ -96,7 +92,7 @@ class EventsControllerTests {
 
     @Test
     fun `test delete events`() {
-        val events = eventsRepository.save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga", modified = "2019-02-03"))
+        val events = eventsRepository.save(Events(name = "Hulk", title = "Hulk Esmaga", description = "Hulk Esmaga"))
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/public/events/${events.id}"))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andDo(MockMvcResultHandlers.print())

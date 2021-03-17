@@ -33,8 +33,7 @@ class EventsServiceImpl(private val repository: EventsRepository) : EventsServic
                     characters = events.characters,
                     name = events.name,
                     title = events.title,
-                    description = events.description,
-                    modified = events.modified
+                    description = events.description
             )
             repository.save(comicsToUpdate)
         }
