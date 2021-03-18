@@ -38,7 +38,6 @@ class CharactersController(private val service: CharactersService) {
         return ResponseEntity(HttpStatus.OK)
     }
 
-    //TODO implementar mensagem de erro caso o usuário passe o id errado.... está estourando excessão ao dar um get no item 0 da lista de array
     @GetMapping("/{id}/comics")
     fun getComics(@PathVariable id: Long) = service.getRelatedComics(id)
 
